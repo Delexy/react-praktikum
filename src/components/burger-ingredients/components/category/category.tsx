@@ -5,9 +5,10 @@ import { IngredientInterface } from "@projectTypes/IngredientTypes";
 interface Props {
   title: string;
   ingredients?: IngredientInterface[];
+  onClick?: (id: string) => void;
 }
 
-export const Category: FC<Props> = memo(({ title, ingredients }) => {
+export const Category: FC<Props> = memo(({ title, ingredients, onClick }) => {
   if (!ingredients || ingredients.length === 0) {
     return null;
   }
@@ -24,7 +25,7 @@ export const Category: FC<Props> = memo(({ title, ingredients }) => {
         }}
       >
         {ingredients.map((ingredient) => (
-          <Ingredient {...ingredient} key={ingredient._id} />
+          <Ingredient {...ingredient} key={ingredient._id} onClick={onClick} />
         ))}
       </ul>
     </div>

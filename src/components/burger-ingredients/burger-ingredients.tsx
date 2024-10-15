@@ -9,6 +9,7 @@ import {
   IngredientInterface,
   IngredientType,
 } from "@projectTypes/IngredientTypes";
+import { IngredientDetails } from "@components/ingredient-details";
 
 interface Props {
   ingredients?: IngredientInterface[];
@@ -25,6 +26,7 @@ enum Tabs {
 export const BurgerIngredients: FC<Props> = memo(
   ({ ingredients = [], hasError, isLoading }) => {
     const [currentTab, setCurrentTab] = useState<Tabs>(Tabs.BUNS);
+    const [currentDetailId, setCurrentDetailId] = useState<string | null>(null);
 
     const bunIngredients = useMemo(
       () => ingredients.filter((item) => item.type === IngredientType.BUN),
@@ -38,6 +40,17 @@ export const BurgerIngredients: FC<Props> = memo(
       () => ingredients.filter((item) => item.type === IngredientType.SAUCE),
       [ingredients]
     );
+
+    const handleOpenModal = useCallback(
+      (id: string) => {
+        setCurrentDetailId(id);
+      },
+      [setCurrentDetailId]
+    );
+
+    const handleCloseModal = useCallback(() => {
+      setCurrentDetailId(null);
+    }, [setCurrentDetailId]);
 
     const handleChangeTab = useCallback(
       (value: string) => {
@@ -59,44 +72,63 @@ export const BurgerIngredients: FC<Props> = memo(
     }
 
     return (
-      <section className={`pt-10 ${classes.layout}`}>
-        <h1 className="text text_type_main-large">Соберите бургер</h1>
+      <>
+        <section className={`pt-10 ${classes.layout}`}>
+          <h1 className="text text_type_main-large">Соберите бургер</h1>
 
-        <div style={{ display: "flex" }} className="pt-5">
-          <Tab
-            value={Tabs.BUNS}
-            active={currentTab === Tabs.BUNS}
-            onClick={handleChangeTab}
-          >
-            Булки
-          </Tab>
-          <Tab
-            value={Tabs.SAUCES}
-            active={currentTab === Tabs.SAUCES}
-            onClick={handleChangeTab}
-          >
-            Соусы
-          </Tab>
-          <Tab
-            value={Tabs.FILLINGS}
-            active={currentTab === Tabs.FILLINGS}
-            onClick={handleChangeTab}
-          >
-            Начинки
-          </Tab>
-        </div>
-        <div className={`mt-10 mb-10 ${classes.categories}`}>
-          {currentTab === Tabs.BUNS && (
-            <Category title="Булки" ingredients={bunIngredients} />
-          )}
-          {currentTab === Tabs.FILLINGS && (
-            <Category title="Соусы" ingredients={mainIngredients} />
-          )}
-          {currentTab === Tabs.SAUCES && (
-            <Category title="Начинки" ingredients={sauceIngredients} />
-          )}
-        </div>
-      </section>
+          <div style={{ display: "flex" }} className="pt-5">
+            <Tab
+              value={Tabs.BUNS}
+              active={currentTab === Tabs.BUNS}
+              onClick={handleChangeTab}
+            >
+              Булки
+            </Tab>
+            <Tab
+              value={Tabs.SAUCES}
+              active={currentTab === Tabs.SAUCES}
+              onClick={handleChangeTab}
+            >
+              Соусы
+            </Tab>
+            <Tab
+              value={Tabs.FILLINGS}
+              active={currentTab === Tabs.FILLINGS}
+              onClick={handleChangeTab}
+            >
+              Начинки
+            </Tab>
+          </div>
+          <div className={`mt-10 mb-10 ${classes.categories}`}>
+            {currentTab === Tabs.BUNS && (
+              <Category
+                title="Булки"
+                ingredients={bunIngredients}
+                onClick={handleOpenModal}
+              />
+            )}
+            {currentTab === Tabs.FILLINGS && (
+              <Category
+                title="Соусы"
+                ingredients={mainIngredients}
+                onClick={handleOpenModal}
+              />
+            )}
+            {currentTab === Tabs.SAUCES && (
+              <Category
+                title="Начинки"
+                ingredients={sauceIngredients}
+                onClick={handleOpenModal}
+              />
+            )}
+          </div>
+        </section>
+        <IngredientDetails
+          isOpen={Boolean(currentDetailId)}
+          ingredient={ingredients.find((item) => item._id === currentDetailId)}
+          closePopup={handleCloseModal}
+        />
+      </>
     );
   }
 );

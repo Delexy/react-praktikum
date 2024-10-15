@@ -11,7 +11,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@components/*": ["src/components/*"],
       "@projectTypes/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@images/*": ["src/images/*"]
     },
 
     /* Bundler mode */
