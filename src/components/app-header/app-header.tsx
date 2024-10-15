@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { memo } from "react";
 
 import {
   Logo,
@@ -10,7 +10,7 @@ import { Button } from "./components";
 
 import classes from "./app-header.module.css";
 
-export const AppHeader: FC = () => {
+export const AppHeader = memo(() => {
   return (
     <header className={`pt-4 pb-4 ${classes.header}`}>
       <nav className={`${classes.container}`}>
@@ -31,4 +31,4 @@ export const AppHeader: FC = () => {
       </nav>
     </header>
   );
-};
+});
