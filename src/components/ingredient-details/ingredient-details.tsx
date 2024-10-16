@@ -11,9 +11,9 @@ interface Props extends ModalProps {
 }
 
 export const IngredientDetails: FC<Props> = memo(
-  ({ closePopup, isOpen, ingredient }) => {
+  ({ closePopup, ingredient }) => {
     return (
-      <Modal closePopup={closePopup} isOpen={isOpen}>
+      <Modal closePopup={closePopup}>
         <div className={`pt-10 pl-10 pr-10 pb-15 ${classes.layout}`}>
           <h3 className="text text_type_main-medium">Детали ингредиента</h3>
           <div className={`mb-4 ${classes.image}`}>

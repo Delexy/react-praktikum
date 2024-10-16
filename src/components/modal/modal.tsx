@@ -7,12 +7,11 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import classes from "./modal.module.css";
 
 export interface ModalProps {
-  isOpen: boolean;
   children?: ReactNode;
   closePopup: () => void;
 }
 
-export const Modal: FC<ModalProps> = ({ children, closePopup, isOpen }) => {
+export const Modal: FC<ModalProps> = ({ children, closePopup }) => {
   useEffect(() => {
     const handleEsc = (evt: KeyboardEvent) => {
       if (evt.key === "Escape") {
@@ -26,10 +25,6 @@ export const Modal: FC<ModalProps> = ({ children, closePopup, isOpen }) => {
       document.removeEventListener("keydown", handleEsc);
     };
   }, [closePopup]);
-
-  if (!isOpen) {
-    return null;
-  }
 
   return createPortal(
     <>

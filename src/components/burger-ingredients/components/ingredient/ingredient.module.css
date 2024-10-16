@@ -17,6 +17,10 @@
   object-fit: contain;
 }
 
+.name {
+  text-align: center;
+}
+
 .price {
   display: flex;
   align-items: center;

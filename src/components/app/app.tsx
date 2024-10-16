@@ -1,12 +1,14 @@
+import { useEffect, useState } from "react";
+
 import { AppHeader } from "@components/app-header";
 import { BurgerIngredients } from "@components/burger-ingredients";
 import { BurgerConstructor } from "@components/burger-constructor";
 
-import classes from "./app.module.css";
-import { useEffect, useState } from "react";
 import { IngredientInterface } from "@projectTypes/IngredientTypes";
 import { GetIngredientsResponse } from "@projectTypes/apiResponses";
 import { API_URL } from "@utils/constants";
+
+import classes from "./app.module.css";
 
 export function App() {
   const [ingredients, setIngredients] = useState<IngredientInterface[]>();
@@ -17,19 +19,25 @@ export function App() {
     setIsLoading(true);
 
     fetch(API_URL)
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+
+        return Promise.reject(`Ошибка ${response.status}`);
+      })
       .then((response: GetIngredientsResponse) => {
         if (!response.success) {
-          setIsLoading(false);
           return setHasError(true);
         }
 
-        setIsLoading(false);
         setIngredients([...response.data]);
       })
       .catch(() => {
-        setIsLoading(false);
         setHasError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 

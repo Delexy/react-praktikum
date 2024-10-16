@@ -6,7 +6,32 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import classes from "./burger-constructor.module.css";
-import { OrderAccepted } from "@components/order-accepted";
+import { OrderDetails } from "@components/order-details";
+import { IngredientInterface } from "@projectTypes/IngredientTypes";
+
+const orderElements: Pick<
+  IngredientInterface,
+  "_id" | "image_mobile" | "name" | "price"
+>[] = [
+  {
+    _id: "1",
+    image_mobile: "https://code.s3.yandex.net/react/code/meat-01-large.png",
+    name: "Биокотлета из марсианской Магнолии",
+    price: 424,
+  },
+  {
+    _id: "2",
+    image_mobile: "https://code.s3.yandex.net/react/code/meat-03-large.png",
+    name: "Филе Люминесцентного тетраодонтимформа",
+    price: 988,
+  },
+  {
+    _id: "3",
+    image_mobile: "https://code.s3.yandex.net/react/code/meat-01-large.png",
+    name: "Биокотлета из марсианской Магнолии",
+    price: 424,
+  },
+];
 
 export const BurgerConstructor = memo(() => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -31,41 +56,14 @@ export const BurgerConstructor = memo(() => {
           thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
         />
         <ul className={`mt-2 mb-2 ${classes.list}`}>
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
-          <Element
-            text="Краторная булка N-200i (верх)"
-            price={50}
-            thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-          />
+          {orderElements.map((element) => (
+            <Element
+              key={element._id}
+              text={element.name}
+              price={element.price}
+              thumbnail={element.image_mobile}
+            />
+          ))}
         </ul>
 
         <Element
@@ -85,7 +83,7 @@ export const BurgerConstructor = memo(() => {
           </Button>
         </div>
       </section>
-      <OrderAccepted isOpen={modalIsOpen} closePopup={closeModalHandler} />
+      {modalIsOpen && <OrderDetails closePopup={closeModalHandler} />}
     </>
   );
 });

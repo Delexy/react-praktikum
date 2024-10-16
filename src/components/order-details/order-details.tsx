@@ -3,13 +3,13 @@ import { FC, memo } from "react";
 import { Modal, ModalProps } from "@components/modal";
 
 import doneImg from "@images/done.png";
-import classes from "./order-accepted.module.css";
+import classes from "./order-details.module.css";
 
 interface Props extends ModalProps {}
 
-export const OrderAccepted: FC<Props> = memo(({ isOpen, closePopup }) => {
+export const OrderDetails: FC<Props> = memo(({ closePopup }) => {
   return (
-    <Modal closePopup={closePopup} isOpen={isOpen}>
+    <Modal closePopup={closePopup}>
       <div className={classes.layout + " pt-30  pb-30 pr-25 pl-25"}>
         <h3
           className={classes.orderNumber + " text text_type_digits-large mb-8"}

@@ -76,7 +76,7 @@ export const BurgerIngredients: FC<Props> = memo(
         <section className={`pt-10 ${classes.layout}`}>
           <h1 className="text text_type_main-large">Соберите бургер</h1>
 
-          <div style={{ display: "flex" }} className="pt-5">
+          <div className={`pt-5 ${classes.flex}`}>
             <Tab
               value={Tabs.BUNS}
               active={currentTab === Tabs.BUNS}
@@ -123,11 +123,15 @@ export const BurgerIngredients: FC<Props> = memo(
             )}
           </div>
         </section>
-        <IngredientDetails
-          isOpen={Boolean(currentDetailId)}
-          ingredient={ingredients.find((item) => item._id === currentDetailId)}
-          closePopup={handleCloseModal}
-        />
+
+        {Boolean(currentDetailId) && (
+          <IngredientDetails
+            ingredient={ingredients.find(
+              (item) => item._id === currentDetailId
+            )}
+            closePopup={handleCloseModal}
+          />
+        )}
       </>
     );
   }
