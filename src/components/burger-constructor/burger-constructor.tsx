@@ -5,9 +5,11 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import classes from "./burger-constructor.module.css";
+import { Modal } from "@components/modal";
 import { OrderDetails } from "@components/order-details";
 import { IngredientInterface } from "@projectTypes/IngredientTypes";
+
+import classes from "./burger-constructor.module.css";
 
 const orderElements: Pick<
   IngredientInterface,
@@ -83,7 +85,11 @@ export const BurgerConstructor = memo(() => {
           </Button>
         </div>
       </section>
-      {modalIsOpen && <OrderDetails closePopup={closeModalHandler} />}
+      {modalIsOpen && (
+        <Modal closePopup={closeModalHandler}>
+          <OrderDetails />
+        </Modal>
+      )}
     </>
   );
 });

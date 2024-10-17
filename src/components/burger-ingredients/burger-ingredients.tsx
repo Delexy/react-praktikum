@@ -10,6 +10,7 @@ import {
   IngredientType,
 } from "@projectTypes/IngredientTypes";
 import { IngredientDetails } from "@components/ingredient-details";
+import { Modal } from "@components/modal";
 
 interface Props {
   ingredients?: IngredientInterface[];
@@ -125,12 +126,13 @@ export const BurgerIngredients: FC<Props> = memo(
         </section>
 
         {Boolean(currentDetailId) && (
-          <IngredientDetails
-            ingredient={ingredients.find(
-              (item) => item._id === currentDetailId
-            )}
-            closePopup={handleCloseModal}
-          />
+          <Modal closePopup={handleCloseModal}>
+            <IngredientDetails
+              ingredient={ingredients.find(
+                (item) => item._id === currentDetailId
+              )}
+            />
+          </Modal>
         )}
       </>
     );
