@@ -1,0 +1,23 @@
+.header {
+  margin: 0 auto;
+  width: 100vw;
+  background-color: var(--background);
+}
+
+.flex {
+  display: flex;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}

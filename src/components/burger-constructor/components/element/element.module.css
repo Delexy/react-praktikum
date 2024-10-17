@@ -1,0 +1,17 @@
+.element {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dragable {
+  cursor: grab;
+}
