@@ -2,12 +2,12 @@ import {
   IngredientInterface,
   IngredientType,
 } from "@projectTypes/IngredientTypes";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@services/store";
 
 export interface ConstructorItem extends IngredientInterface {
-  uniqId: number;
+  uniqId: string;
 }
 
 interface ConstructorItemsState {
@@ -24,15 +24,26 @@ export const constructorItemsSlice = createSlice({
   name: "constructorItems",
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<IngredientInterface>) => {
-      const ingredient = { ...action.payload, uniqId: Math.random() };
-      const isBun = ingredient.type === IngredientType.BUN;
+    addIngredient: {
+      reducer: (state, action: PayloadAction<ConstructorItem>) => {
+        const ingredient = { ...action.payload };
+        const isBun = ingredient.type === IngredientType.BUN;
 
-      if (isBun) {
-        state.bun = ingredient;
-      } else {
-        state.ingredients.push(ingredient);
-      }
+        if (isBun) {
+          state.bun = ingredient;
+        } else {
+          state.ingredients.push(ingredient);
+        }
+      },
+      prepare: (ingredient: IngredientInterface) => {
+        const uniqId = nanoid();
+        return {
+          payload: {
+            ...ingredient,
+            uniqId,
+          },
+        };
+      },
     },
     removeIngredient: (state, action: PayloadAction<number>) => {
       state.ingredients.splice(action.payload, 1);
