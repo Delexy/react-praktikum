@@ -11,6 +11,7 @@ export default defineConfig({
       "@projectTypes": "/src/types",
       "@utils": "/src/utils",
       "@images": "/src/images",
+      "@services": "/src/services",
     },
   },
 });
