@@ -9,9 +9,8 @@
   display: flex;
   gap: 40px;
   max-width: 1280px;
-  overflow: hidden;
   width: 100%;
-  flex-grow: 1;
+  height: calc(100% - 88px);
 }
 
 @media screen and (max-width: 1280px) {

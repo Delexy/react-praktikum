@@ -1,86 +1,111 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Element } from "./components";
 import {
   Button,
+  ConstructorElement,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Modal } from "@components/modal";
 import { OrderDetails } from "@components/order-details";
-import { IngredientInterface } from "@projectTypes/IngredientTypes";
 
 import classes from "./burger-constructor.module.css";
-
-const orderElements: Pick<
+import {
+  addIngredient,
+  clearIngredients,
+  selectBun,
+  selectConstructorItems,
+  selectTotalPrice,
+} from "@services/constructorItemsSlice";
+import { useCreateOrderMutation } from "@services/normaApi/normaApi";
+import { useDrop } from "react-dnd";
+import {
+  IngredientDragType,
   IngredientInterface,
-  "_id" | "image_mobile" | "name" | "price"
->[] = [
-  {
-    _id: "1",
-    image_mobile: "https://code.s3.yandex.net/react/code/meat-01-large.png",
-    name: "Биокотлета из марсианской Магнолии",
-    price: 424,
-  },
-  {
-    _id: "2",
-    image_mobile: "https://code.s3.yandex.net/react/code/meat-03-large.png",
-    name: "Филе Люминесцентного тетраодонтимформа",
-    price: 988,
-  },
-  {
-    _id: "3",
-    image_mobile: "https://code.s3.yandex.net/react/code/meat-01-large.png",
-    name: "Биокотлета из марсианской Магнолии",
-    price: 424,
-  },
-];
+} from "@projectTypes/IngredientTypes";
+
+const bunImagePlaceholder =
+  "https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png";
 
 export const BurgerConstructor = memo(() => {
+  const dispatch = useDispatch();
+
+  const [createOrder] = useCreateOrderMutation({
+    fixedCacheKey: "create-order",
+  });
+
+  const [{ isOver, canDrop }, constructorDropRef] = useDrop({
+    accept: IngredientDragType.INGREDIENT,
+    drop: (ingredient: IngredientInterface) => {
+      dispatch(addIngredient(ingredient));
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
+    }),
+  });
+
+  const constructorItems = useSelector(selectConstructorItems);
+  const totalPrice = useSelector(selectTotalPrice);
+  const bunItem = useSelector(selectBun);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const openModalHandler = useCallback(() => {
+  const handleCreateOrder = useCallback(() => {
     setModalIsOpen(true);
-  }, [setModalIsOpen]);
+
+    const ingredientsIds = constructorItems.map((ingredient) => ingredient._id);
+    const bunId = bunItem?._id;
+
+    if (bunId) {
+      ingredientsIds.unshift(bunId);
+      ingredientsIds.push(bunId);
+    }
+
+    createOrder({
+      ingredients: ingredientsIds,
+    }).then(() => dispatch(clearIngredients()));
+  }, [constructorItems, bunItem?._id, createOrder, dispatch]);
 
   const closeModalHandler = useCallback(() => {
     setModalIsOpen(false);
   }, [setModalIsOpen]);
 
+  const bunElementProps = useMemo(
+    () => ({
+      extraClass: classes.bunItem,
+      isLocked: true,
+      text: bunItem?.name ?? "Добавьте булку",
+      price: bunItem?.price ?? 0,
+      thumbnail: bunItem?.image_mobile ?? bunImagePlaceholder,
+    }),
+    [bunItem]
+  );
+
   return (
     <>
-      <section className={`pt-25 pb-10 ${classes.layout}`}>
-        <Element
-          isDragable={false}
-          type="top"
-          isLocked={true}
-          text="Краторная булка N-200i (верх)"
-          price={200}
-          thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-        />
+      <section
+        className={`pt-25 pb-10 ${classes.layout} ${classes.dropSection} ${
+          canDrop && classes.canDrop
+        } ${isOver && classes.dropOver}`}
+        ref={constructorDropRef}
+      >
+        <ConstructorElement {...bunElementProps} type="top" />
         <ul className={`mt-2 mb-2 ${classes.list}`}>
-          {orderElements.map((element) => (
-            <Element
-              key={element._id}
-              text={element.name}
-              price={element.price}
-              thumbnail={element.image_mobile}
-            />
+          {constructorItems.map((element, idx) => (
+            <Element key={element.uniqId} ingredient={element} index={idx} />
           ))}
         </ul>
-
-        <Element
-          isDragable={false}
-          type="bottom"
-          isLocked={true}
-          text="Краторная булка N-200i (низ)"
-          price={200}
-          thumbnail="https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png"
-        />
+        <ConstructorElement {...bunElementProps} type="bottom" />
         <div className={`mt-10 ${classes.footer}`}>
           <p className={`mt-1 mb-1 text_type_digits-default ${classes.price}`}>
-            610 <CurrencyIcon type="primary" />
+            {totalPrice} <CurrencyIcon type="primary" />
           </p>
-          <Button htmlType="submit" onClick={openModalHandler}>
+          <Button
+            htmlType="submit"
+            onClick={handleCreateOrder}
+            disabled={!bunItem || constructorItems.length === 0}
+          >
             Оформить заказ
           </Button>
         </div>

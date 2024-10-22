@@ -12,7 +12,8 @@
       "@components/*": ["src/components/*"],
       "@projectTypes/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
-      "@images/*": ["src/images/*"]
+      "@images/*": ["src/images/*"],
+      "@services/*": ["src/services/*"]
     },
 
     /* Bundler mode */
