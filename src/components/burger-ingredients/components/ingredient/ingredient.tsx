@@ -1,6 +1,9 @@
-import { FC, memo, useState } from "react";
+import { FC, memo, useCallback } from "react";
 
-import { IngredientInterface } from "@projectTypes/IngredientTypes";
+import {
+  IngredientDragType,
+  IngredientInterface,
+} from "@projectTypes/IngredientTypes";
 import {
   Counter,
   CurrencyIcon,
@@ -8,18 +11,46 @@ import {
 import { Image } from "@components/image";
 
 import classes from "./ingredient.module.css";
+import { useDispatch } from "react-redux";
+import { setIngredient } from "@services/currentIngredientSlice";
+import { useDrag } from "react-dnd";
+import { useAppSelector } from "@hooks/typedHooks";
 
 interface Props {
   ingredient: IngredientInterface;
-  onClick?: (id: string) => void;
 }
 
-export const Ingredient: FC<Props> = memo(({ onClick, ingredient }) => {
-  const [count] = useState(0);
-  const { _id, name, image, price } = ingredient;
+export const Ingredient: FC<Props> = memo(({ ingredient }) => {
+  const [{ opacity }, dragRef] = useDrag({
+    type: IngredientDragType.INGREDIENT,
+    item: ingredient,
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.5 : 1,
+    }),
+  });
+  const dispatch = useDispatch();
+
+  const count = useAppSelector(
+    (state) =>
+      [
+        ...state.constructorItems.ingredients,
+        state.constructorItems.bun,
+      ].filter((item) => item?._id === ingredient._id && Boolean(item)).length
+  );
+  const { name, image, price } = ingredient;
+
+  const handleClick = useCallback(() => {
+    dispatch(setIngredient(ingredient));
+  }, [dispatch, ingredient]);
 
   return (
-    <li className={classes.element} onClick={() => onClick?.(_id)}>
+    <li
+      className={classes.element}
+      onClick={handleClick}
+      draggable
+      style={{ opacity }}
+      ref={dragRef}
+    >
       {count > 0 && <Counter count={count} />}
       <div className={`pl-4 pr-4 mb-1 ${classes.image}`}>
         <Image src={image} alt={name} />
