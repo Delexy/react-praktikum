@@ -6,15 +6,7 @@ import { Category } from "./components";
 
 import classes from "./burger-ingredients.module.css";
 import { IngredientType } from "@projectTypes/IngredientTypes";
-import { IngredientDetails } from "@components/ingredient-details";
-import { Modal } from "@components/modal";
 import { useGetIngredientsQuery } from "@services/normaApi";
-import { useAppDispatch } from "@hooks/typedHooks";
-import {
-  clearIngredient,
-  selectIngredient,
-} from "@services/currentIngredientSlice";
-import { useSelector } from "react-redux";
 
 interface Props {}
 
@@ -25,8 +17,6 @@ enum Tabs {
 }
 
 export const BurgerIngredients: FC<Props> = memo(() => {
-  const dispatch = useAppDispatch();
-  const detailIngredient = useSelector(selectIngredient);
   const { ingredients, isError, isLoading, isSuccess } = useGetIngredientsQuery(
     undefined,
     {
@@ -54,10 +44,6 @@ export const BurgerIngredients: FC<Props> = memo(() => {
     () => ingredients.filter((item) => item.type === IngredientType.SAUCE),
     [ingredients]
   );
-
-  const handleCloseModal = useCallback(() => {
-    dispatch(clearIngredient());
-  }, [dispatch]);
 
   const bunRef = useRef<HTMLDivElement>(null);
   const fillingRef = useRef<HTMLDivElement>(null);
@@ -173,12 +159,6 @@ export const BurgerIngredients: FC<Props> = memo(() => {
           />
         </div>
       </section>
-
-      {Boolean(detailIngredient) && (
-        <Modal closePopup={handleCloseModal}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 });

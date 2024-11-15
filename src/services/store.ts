@@ -1,16 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { normaApi } from "./normaApi";
 import { constructorItemsSlice } from "./constructorItemsSlice";
-import { currentIngredientSlice } from "./currentIngredientSlice";
+import { authApi } from "./authApi/authApi";
 
 export const store = configureStore({
   reducer: {
     constructorItems: constructorItemsSlice.reducer,
-    currentIngredient: currentIngredientSlice.reducer,
     [normaApi.reducerPath]: normaApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(normaApi.middleware),
+    getDefaultMiddleware().concat(normaApi.middleware, authApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

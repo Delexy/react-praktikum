@@ -11,16 +11,19 @@ import {
 import { Image } from "@components/image";
 
 import classes from "./ingredient.module.css";
-import { useDispatch } from "react-redux";
-import { setIngredient } from "@services/currentIngredientSlice";
 import { useDrag } from "react-dnd";
 import { useAppSelector } from "@hooks/typedHooks";
+import { useLocation, useNavigate } from "react-router-dom";
+import { makeRoutePath } from "@utils/constants";
 
 interface Props {
   ingredient: IngredientInterface;
 }
 
 export const Ingredient: FC<Props> = memo(({ ingredient }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [{ opacity }, dragRef] = useDrag({
     type: IngredientDragType.INGREDIENT,
     item: ingredient,
@@ -28,7 +31,6 @@ export const Ingredient: FC<Props> = memo(({ ingredient }) => {
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
   });
-  const dispatch = useDispatch();
 
   const count = useAppSelector(
     (state) =>
@@ -37,11 +39,13 @@ export const Ingredient: FC<Props> = memo(({ ingredient }) => {
         state.constructorItems.bun,
       ].filter((item) => item?._id === ingredient._id && Boolean(item)).length
   );
-  const { name, image, price } = ingredient;
+  const { name, image, price, _id } = ingredient;
 
   const handleClick = useCallback(() => {
-    dispatch(setIngredient(ingredient));
-  }, [dispatch, ingredient]);
+    navigate(makeRoutePath.Ingredient(_id), {
+      state: { backgroundLocation: location },
+    });
+  }, [_id, location, navigate]);
 
   return (
     <li

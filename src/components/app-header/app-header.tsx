@@ -6,7 +6,9 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Button } from "./components";
+
+import { Link, NavLink } from "react-router-dom";
+import { ROUTES } from "@utils/constants";
 
 import classes from "./app-header.module.css";
 
@@ -15,19 +17,57 @@ export const AppHeader = memo(() => {
     <header className={`pt-4 pb-4 ${classes.header}`}>
       <nav className={`${classes.container}`}>
         <div className={classes.flex}>
-          <Button
-            Icon={<BurgerIcon type="primary" />}
-            text="Конструктор"
-            className="mr-2"
-          />
-          <Button Icon={<ListIcon type="primary" />} text="Лента заказов" />
+          <NavLink
+            to={ROUTES.Main}
+            className={({ isActive }) =>
+              `text text_type_main-default mt-4 mb-4 pr-5 pl-5 ${
+                classes.link
+              } ${isActive && classes.activeLink}`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <BurgerIcon type={isActive ? "primary" : "secondary"} />
+                Конструктор
+              </>
+            )}
+          </NavLink>
+          <NavLink
+            to={ROUTES.Orders}
+            className={({ isActive }) =>
+              `text text_type_main-default mt-4 mb-4 pr-5 pl-5 ${
+                classes.link
+              } ${isActive && classes.activeLink}`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <ListIcon type={isActive ? "primary" : "secondary"} />
+                Лента заказов
+              </>
+            )}
+          </NavLink>
           <div className={`${classes.logo} ml-25`}>
-            <a href="/">
+            <Link to={ROUTES.Main}>
               <Logo />
-            </a>
+            </Link>
           </div>
         </div>
-        <Button Icon={<ProfileIcon type="primary" />} text="Личный кабинет" />
+        <NavLink
+          to={ROUTES.Profile}
+          className={({ isActive }) =>
+            `text text_type_main-default mt-4 mb-4 pr-5 pl-5 ${classes.link} ${
+              isActive && classes.activeLink
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <ProfileIcon type={isActive ? "primary" : "secondary"} />
+              Личный кабинет
+            </>
+          )}
+        </NavLink>
       </nav>
     </header>
   );

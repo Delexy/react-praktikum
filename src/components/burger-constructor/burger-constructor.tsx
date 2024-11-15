@@ -24,16 +24,23 @@ import {
   IngredientDragType,
   IngredientInterface,
 } from "@projectTypes/IngredientTypes";
+import { useGetUserQuery } from "@services/authApi";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@utils/constants";
 
 const bunImagePlaceholder =
   "https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png";
 
 export const BurgerConstructor = memo(() => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading: userIsLoading, data: userData } = useGetUserQuery();
 
   const [createOrder] = useCreateOrderMutation({
     fixedCacheKey: "create-order",
   });
+
+  const isAuthed = Boolean(userData?.user);
 
   const [{ isOver, canDrop }, constructorDropRef] = useDrop({
     accept: IngredientDragType.INGREDIENT,
@@ -52,6 +59,10 @@ export const BurgerConstructor = memo(() => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleCreateOrder = useCallback(() => {
+    if (!isAuthed) {
+      return navigate(ROUTES.Login);
+    }
+
     setModalIsOpen(true);
 
     const ingredientsIds = constructorItems.map((ingredient) => ingredient._id);
@@ -104,7 +115,9 @@ export const BurgerConstructor = memo(() => {
           <Button
             htmlType="submit"
             onClick={handleCreateOrder}
-            disabled={!bunItem || constructorItems.length === 0}
+            disabled={
+              !bunItem || constructorItems.length === 0 || userIsLoading
+            }
           >
             Оформить заказ
           </Button>
