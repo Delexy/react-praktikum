@@ -9,12 +9,15 @@ import { store } from "@services/store";
 import { Provider } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <DndProvider backend={HTML5Backend}>
       <Provider store={store}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </Provider>
     </DndProvider>
   </StrictMode>

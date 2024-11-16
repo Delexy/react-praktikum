@@ -1,1 +1,1 @@
-export { useGetIngredientsQuery, normaApi } from "./normaApi";
+export * from "./normaApi";

@@ -1,15 +1,19 @@
 import {
+  ChangePasswordRequest,
+  ChangePasswordResponse,
   CreateOrderRequest,
   CreateOrderResponse,
   GetIngredientsResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from "@projectTypes/apiResponses";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "@services/authApi/baseQueryWithReauth";
+import { Token } from "@utils/token";
 
 export const normaApi = createApi({
   reducerPath: "normaApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://norma.nomoreparties.space/api/",
-  }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     getIngredients: builder.query<GetIngredientsResponse, void>({
       query: () => `ingredients`,
@@ -22,10 +26,54 @@ export const normaApi = createApi({
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: Token.get(),
+        },
+      }),
+    }),
+    resetPassword: builder.mutation<
+      ResetPasswordResponse,
+      ResetPasswordRequest
+    >({
+      query: (body) => ({
+        url: "password-reset",
+        body,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        responseHandler: async (response) => {
+          localStorage.setItem("reset-password", "true");
+
+          return await response.json();
+        },
+      }),
+    }),
+    changePassword: builder.mutation<
+      ChangePasswordResponse,
+      ChangePasswordRequest
+    >({
+      query: (body) => ({
+        url: "password-reset/reset",
+        body,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        responseHandler: async (response) => {
+          localStorage.removeItem("reset-password");
+
+          return await response.json();
         },
       }),
     }),
   }),
 });
 
-export const { useGetIngredientsQuery, useCreateOrderMutation } = normaApi;
+export const {
+  useGetIngredientsQuery,
+  useCreateOrderMutation,
+  useResetPasswordMutation,
+  useChangePasswordMutation,
+} = normaApi;

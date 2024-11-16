@@ -21,3 +21,15 @@
   display: flex;
   align-items: center;
 }
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-inactive-color);
+  text-decoration: none;
+}
+
+.activeLink {
+  color: var(--text-primary-color);
+}
