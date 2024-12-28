@@ -15,6 +15,7 @@ import { ProfilePage } from "@pages/profile";
 import { ResetPage } from "@pages/reset-password";
 import { ForgotPage } from "@pages/forgot-password";
 import { OnlyAuth, OnlyUnAuth } from "@components/protected-route";
+import { FeedPage } from "@pages/feed";
 
 export function App() {
   const location: LocationWithState = useLocation();
@@ -51,6 +52,7 @@ export function App() {
             path={ROUTES.ForgotPassword}
             element={<OnlyUnAuth component={<ForgotPage />} />}
           />
+          <Route path={ROUTES.Feed} element={<FeedPage />} />
           <Route
             path={`${ROUTES.Ingredient}/:ingredientId`}
             element={<IngredientDetails />}
@@ -62,6 +64,22 @@ export function App() {
           <Routes>
             <Route
               path={`${ROUTES.Ingredient}/:ingredientId`}
+              element={
+                <Modal closePopup={handleModalClose}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path={`${ROUTES.Feed}/:orderId`}
+              element={
+                <Modal closePopup={handleModalClose}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path={`${ROUTES.Orders}/:orderId`}
               element={
                 <Modal closePopup={handleModalClose}>
                   <IngredientDetails />

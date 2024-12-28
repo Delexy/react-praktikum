@@ -33,7 +33,7 @@ export const AppHeader = memo(() => {
             )}
           </NavLink>
           <NavLink
-            to={ROUTES.Orders}
+            to={ROUTES.Feed}
             className={({ isActive }) =>
               `text text_type_main-default mt-4 mb-4 pr-5 pl-5 ${
                 classes.link
