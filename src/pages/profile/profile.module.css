@@ -17,9 +17,3 @@
   text-decoration: none;
   height: 64px;
 }
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}

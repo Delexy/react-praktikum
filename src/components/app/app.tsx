@@ -16,6 +16,8 @@ import { ResetPage } from "@pages/reset-password";
 import { ForgotPage } from "@pages/forgot-password";
 import { OnlyAuth, OnlyUnAuth } from "@components/protected-route";
 import { FeedPage } from "@pages/feed";
+import { FeedOrderDetails } from "@components/feed-order-details";
+import { Form, Orders } from "@pages/profile/components";
 
 export function App() {
   const location: LocationWithState = useLocation();
@@ -35,7 +37,10 @@ export function App() {
           <Route
             path={ROUTES.Profile}
             element={<OnlyAuth component={<ProfilePage />} />}
-          />
+          >
+            <Route path={ROUTES.Profile} element={<Form />} />
+            <Route path={ROUTES.Orders} element={<Orders />} />
+          </Route>
           <Route
             path={ROUTES.Register}
             element={<OnlyUnAuth component={<RegisterPage />} />}
@@ -57,6 +62,14 @@ export function App() {
             path={`${ROUTES.Ingredient}/:ingredientId`}
             element={<IngredientDetails />}
           />
+          <Route
+            path={`${ROUTES.Feed}/:orderId`}
+            element={<FeedOrderDetails />}
+          />
+          <Route
+            path={`${ROUTES.Orders}/:orderId`}
+            element={<OnlyAuth component={<FeedOrderDetails />} />}
+          />
           <Route path="*" element={<UnknownPage />} />
         </Routes>
 
@@ -74,16 +87,20 @@ export function App() {
               path={`${ROUTES.Feed}/:orderId`}
               element={
                 <Modal closePopup={handleModalClose}>
-                  <IngredientDetails />
+                  <FeedOrderDetails />
                 </Modal>
               }
             />
             <Route
               path={`${ROUTES.Orders}/:orderId`}
               element={
-                <Modal closePopup={handleModalClose}>
-                  <IngredientDetails />
-                </Modal>
+                <OnlyAuth
+                  component={
+                    <Modal closePopup={handleModalClose}>
+                      <FeedOrderDetails />
+                    </Modal>
+                  }
+                />
               }
             />
           </Routes>

@@ -91,6 +91,12 @@ export const normaApi = createApi({
         ws.close();
       },
     }),
+    getOrder: builder.query<
+      Pick<OrderListResponse, "orders" | "success">,
+      string
+    >({
+      query: (orderId) => `orders/${orderId}`,
+    }),
   }),
 });
 
@@ -100,4 +106,5 @@ export const {
   useResetPasswordMutation,
   useChangePasswordMutation,
   useGetWSOrdersQuery,
+  useGetOrderQuery,
 } = normaApi;

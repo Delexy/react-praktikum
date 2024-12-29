@@ -1,5 +1,7 @@
 export const BURGER_API_URL = `https://norma.nomoreparties.space/api`;
 export const WS_API_URL = `https://norma.nomoreparties.space`;
+export const WS_API_ORDERS_ALL_PATH = "/orders/all";
+export const WS_API_ORDERS_PATH = "/orders";
 
 export enum ROUTES {
   Main = "/",

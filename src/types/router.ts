@@ -9,3 +9,4 @@ export interface LocationState {
 export type LocationWithState = Location<LocationState>;
 
 export type IngredientParams = "ingredientId";
+export type OrderParams = "orderId";

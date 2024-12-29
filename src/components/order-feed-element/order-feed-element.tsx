@@ -8,40 +8,15 @@ import { DetailedOrder } from "@projectTypes/apiResponses";
 
 import classes from "./order-feed-element.module.css";
 import { IngredientImageList } from "./components";
-import { useGetIngredientsQuery } from "@services/normaApi";
-import { useMemo } from "react";
-
-enum OrderStatuses {
-  "created" = "Создан",
-  "pending" = "Готовится",
-  "done" = "Готов",
-}
+import { OrderStatuses } from "@projectTypes/orderTypes";
+import { useOrderIngredients } from "@hooks/useOrderIngredients";
 
 export const OrderFeedElement = ({ order }: { order: DetailedOrder }) => {
   const location = useLocation();
   const isProfilePage = useMatch(ROUTES.Orders);
-  const { ingredients } = useGetIngredientsQuery(undefined, {
-    selectFromResult: (initialState) => ({
-      ...initialState,
-      ingredients: initialState.data?.data ?? [],
-      isError:
-        initialState.isError ||
-        (!initialState.data?.success && initialState.isSuccess),
-    }),
+  const { orderIngredients, orderSum } = useOrderIngredients({
+    ingredientsIds: order.ingredients,
   });
-  const orderIngredients = useMemo(
-    () =>
-      ingredients.filter((ingredient) =>
-        order.ingredients.includes(ingredient._id)
-      ),
-    [ingredients, order.ingredients]
-  );
-  const orderSum = useMemo(() => {
-    return orderIngredients.reduce(
-      (sum, ingredient) => (sum += ingredient.price),
-      0
-    );
-  }, [orderIngredients]);
 
   return (
     <Link
@@ -61,7 +36,13 @@ export const OrderFeedElement = ({ order }: { order: DetailedOrder }) => {
       </div>
       <h3 className={"text text_type_main-medium"}>{order.name}</h3>
       {Boolean(isProfilePage) && (
-        <p className="text text_type_main-default status">
+        <p
+          className={`text text_type_main-default ${
+            order?.status === "done"
+              ? "text_color_success"
+              : "text_color_primary"
+          }`}
+        >
           {OrderStatuses[order.status]}
         </p>
       )}

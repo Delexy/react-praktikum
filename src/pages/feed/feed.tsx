@@ -3,6 +3,7 @@ import { OrderFeedElement } from "@components/order-feed-element";
 import { useMemo } from "react";
 
 import classes from "./feed.module.css";
+import { WS_API_ORDERS_ALL_PATH } from "@utils/constants";
 
 interface OrderStatuses {
   doneList: number[];
@@ -10,7 +11,7 @@ interface OrderStatuses {
 }
 
 export const FeedPage = () => {
-  const { data } = useGetWSOrdersQuery("/orders/all");
+  const { data } = useGetWSOrdersQuery(WS_API_ORDERS_ALL_PATH);
 
   const { doneList = [], preparingList = [] } = useMemo(
     () =>
