@@ -23,7 +23,7 @@ export const Orders = () => {
   return (
     <div className={classes.wrapper}>
       {orders.map((order) => {
-        return <OrderFeedElement order={order} />;
+        return <OrderFeedElement order={order} key={order._id} />;
       })}
     </div>
   );

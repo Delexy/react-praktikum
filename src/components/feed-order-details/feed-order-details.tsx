@@ -52,6 +52,7 @@ export const FeedOrderDetails = () => {
           <Ingredient
             {...ingredient}
             amount={orderIngredientsAmount[ingredient._id]}
+            key={ingredient._id}
           />
         ))}
       </ul>
