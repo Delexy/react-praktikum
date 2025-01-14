@@ -1,4 +1,7 @@
 export const BURGER_API_URL = `https://norma.nomoreparties.space/api`;
+export const WS_API_URL = `https://norma.nomoreparties.space`;
+export const WS_API_ORDERS_ALL_PATH = "/orders/all";
+export const WS_API_ORDERS_PATH = "/orders";
 
 export enum ROUTES {
   Main = "/",
@@ -9,9 +12,11 @@ export enum ROUTES {
   ResetPassword = "/reset-password",
   Ingredient = "/ingredient",
   Orders = `${ROUTES.Profile}/orders`,
+  Feed = `/feed`,
 }
 
 export const makeRoutePath = {
   Ingredient: (id: string) => `${ROUTES.Ingredient}/${id}`,
   Order: (id: string) => `${ROUTES.Orders}/${id}`,
+  FeedOrder: (id: string) => `${ROUTES.Feed}/${id}`,
 };

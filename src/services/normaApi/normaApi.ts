@@ -4,11 +4,13 @@ import {
   CreateOrderRequest,
   CreateOrderResponse,
   GetIngredientsResponse,
+  OrderListResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
 } from "@projectTypes/apiResponses";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "@services/authApi/baseQueryWithReauth";
+import { WS_API_URL } from "@utils/constants";
 import { Token } from "@utils/token";
 
 export const normaApi = createApi({
@@ -68,6 +70,33 @@ export const normaApi = createApi({
         },
       }),
     }),
+    getWSOrders: builder.query<OrderListResponse, string>({
+      queryFn: () => ({
+        data: { success: undefined, orders: [], total: 0, totalToday: 0 },
+      }),
+      async onCacheEntryAdded(
+        arg,
+        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
+      ) {
+        await cacheDataLoaded;
+        const ws = new WebSocket(WS_API_URL + arg);
+
+        ws.addEventListener("message", (e) => {
+          const data = JSON.parse(e.data);
+          updateCachedData(() => data);
+        });
+
+        await cacheEntryRemoved;
+
+        ws.close();
+      },
+    }),
+    getOrder: builder.query<
+      Pick<OrderListResponse, "orders" | "success">,
+      string
+    >({
+      query: (orderId) => `orders/${orderId}`,
+    }),
   }),
 });
 
@@ -76,4 +105,6 @@ export const {
   useCreateOrderMutation,
   useResetPasswordMutation,
   useChangePasswordMutation,
+  useGetWSOrdersQuery,
+  useGetOrderQuery,
 } = normaApi;

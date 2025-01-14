@@ -1,0 +1,46 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 70dvh;
+  min-height: 20dvh;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header {
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.number {
+  text-align: center;
+}
+
+.list {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 16px;
+  overflow: auto;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.link {
+  text-decoration: none;
+  color: #f2f2f3;
+}

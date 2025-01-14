@@ -90,3 +90,20 @@ export interface PatchUserResponse {
   success: boolean;
   user: User;
 }
+
+export interface DetailedOrder {
+  ingredients: string[];
+  _id: string;
+  name: string;
+  status: "done" | "pending" | "created";
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderListResponse {
+  success: boolean | undefined;
+  orders: Array<DetailedOrder>;
+  total: number;
+  totalToday: number;
+}

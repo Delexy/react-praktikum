@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Element } from "./components";
 import {
   Button,
@@ -27,12 +26,13 @@ import {
 import { useGetUserQuery } from "@services/authApi";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@utils/constants";
+import { useAppDispatch, useAppSelector } from "@hooks/typedHooks";
 
 const bunImagePlaceholder =
   "https://yandex-practicum.github.io/react-developer-burger-ui-components/docs/static/img-5f9ccf21a0eb45d06e57410b025f366c.png";
 
 export const BurgerConstructor = memo(() => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isLoading: userIsLoading, data: userData } = useGetUserQuery();
 
@@ -53,9 +53,9 @@ export const BurgerConstructor = memo(() => {
     }),
   });
 
-  const constructorItems = useSelector(selectConstructorItems);
-  const totalPrice = useSelector(selectTotalPrice);
-  const bunItem = useSelector(selectBun);
+  const constructorItems = useAppSelector(selectConstructorItems);
+  const totalPrice = useAppSelector(selectTotalPrice);
+  const bunItem = useAppSelector(selectBun);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleCreateOrder = useCallback(() => {
