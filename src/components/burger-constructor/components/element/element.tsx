@@ -94,6 +94,7 @@ export const Element: FC<Props> = memo(({ ingredient, index }) => {
 
   return (
     <li
+      data-cy="element"
       className={classes.element}
       draggable
       ref={ref}

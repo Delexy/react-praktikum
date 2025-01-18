@@ -29,7 +29,11 @@ export const Modal: FC<ModalProps> = ({ children, closePopup }) => {
   return createPortal(
     <>
       <div className={classes.modal}>
-        <button className={classes.close} onClick={closePopup}>
+        <button
+          className={classes.close}
+          onClick={closePopup}
+          data-cy="modal-close-btn"
+        >
           <CloseIcon type="primary" />
         </button>
         {children}

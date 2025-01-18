@@ -50,6 +50,7 @@ export const Ingredient: FC<Props> = memo(({ ingredient }) => {
   return (
     <li
       className={classes.element}
+      data-cy="ingredient"
       onClick={handleClick}
       draggable
       style={{ opacity }}
@@ -62,7 +63,10 @@ export const Ingredient: FC<Props> = memo(({ ingredient }) => {
       <p className={`text_type_digits-default mb-1 mt-1 ${classes.price}`}>
         {price} <CurrencyIcon type="primary" />
       </p>
-      <p className={`text_type_main-default mt-1 mb-1 ${classes.name}`}>
+      <p
+        className={`text_type_main-default mt-1 mb-1 ${classes.name}`}
+        data-cy="ingredient-name"
+      >
         {name}
       </p>
     </li>
