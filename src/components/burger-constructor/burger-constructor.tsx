@@ -99,6 +99,7 @@ export const BurgerConstructor = memo(() => {
         className={`pt-25 pb-10 ${classes.layout} ${classes.dropSection} ${
           canDrop && classes.canDrop
         } ${isOver && classes.dropOver}`}
+        data-cy="drop-area"
         ref={constructorDropRef}
       >
         <ConstructorElement {...bunElementProps} type="top" />
@@ -113,6 +114,7 @@ export const BurgerConstructor = memo(() => {
             {totalPrice} <CurrencyIcon type="primary" />
           </p>
           <Button
+            data-cy="button-send-order"
             htmlType="submit"
             onClick={handleCreateOrder}
             disabled={
